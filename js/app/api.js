@@ -14,7 +14,7 @@ define(['twitter', 'foursquare'], function(){
 		var bindMapEvents = function(){
 			$('#checkLocation button').on('click', function(e){
 				e.preventDefault();
-				getFoursquare.update();
+				//getFoursquare.update();
 			});
 		};
 
