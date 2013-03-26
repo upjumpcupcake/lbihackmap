@@ -6,6 +6,7 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 		------------------------------------------------ */
 
 		var googleMap;
+		var geocoder;
 		var mapsAPiKey = 'AIzaSyCZ4VOmMY7satBEH7wRhgWWGBhztulXE8g';
 
 		var domElements = {
@@ -15,9 +16,10 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 		/* 	Methods
 		------------------------------------------------ */
 
-		var init = function() {
+		var init = function(callback) {
 			console.log('Map Init!');
 			getUserLocation();
+			callback();
 		}
 
 		var getUserLocation = function () {
@@ -49,7 +51,7 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 			}
 			initMapAtLocation(loc);
 		}
-
+		
 		var usePostcodeForMapLocation = function(pc) {
 			
 		}
@@ -61,7 +63,9 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 		var initMapAtLocation = function(pos){
 			
 			console.log('Initialising Google Map at Location: ' + pos.latitude + ' ' + pos.longitude);
-
+			
+			geocoder = new google.maps.Geocoder();
+			
 			var mapOptions = {
 				center: new google.maps.LatLng(pos.latitude, pos.longitude),
 				zoom: 15,
@@ -73,9 +77,33 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 			//debugger;
 
 		};
+		
+		var codeAddress = function(){
+			var location = $('#location').val();
+			geocoder.geocode({'address': location}, function(results, status){
+				if(status == google.maps.GeocoderStatus.OK){
+					googleMap.setCenter(results[0].geometry.location);
+					var marker = new google.maps.Marker({
+						map: googleMap,
+						position: results[0].geometry.location
+					})
+				} else{
+					console.log("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+		
+		var bindMapEvents = function(){
+			console.log('bind map events');
+			$('#checkLocation button').on('click', function(){
+				codeAddress();
+			});
+		};
 
 		return {
-			init: init
+			init: function(){
+				init(bindMapEvents);
+			}
 		};
 
 	});

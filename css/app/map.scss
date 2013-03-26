@@ -1,7 +1,85 @@
-#map {
+/* --------------------------------------------------------------------------------- 
+
+	Team: Middle of nowhere
+	Authors - Lee Ryan, Adam Waite, Phil Young, Dan Pryzbylowski
+	
+	Application scss 
+	- All application styles housed here
+	
+---------------------------------------------------------------------------------   */
+
+html{
+	height: 100%;	
+}
+
+body{
+	font-size: 62.5%;
+	background: #f0f0f0;
+	height: 100%;
+}
+
+/* font declerations */
+h1, h2, h3, h4, h5, h6{
+	font-family: $title-stack;
+	font-weight: bold;
+}
+
+h1{
+	margin: 0;
+	font-size: 5.2em;
+	color: $med-green;
+	-webkit-text-shadow: $std-text-shadow;
+	-moz-text-shadow: $std-text-shadow;
+	text-shadow: $std-text-shadow;
+}
+
+header{
+	background: $dark-grey;
+	padding: $block-padding;
+	text-align: center;
+}
+
+#main{
+	background: $med-grey;
+	height: 100%;
+}
+
+#map{
+	width: 100%;
+	height: 100%;
+}
+
+.formWrapper{
 	position: absolute;
-	top: 0;
+	background: $dark-grey;
+	padding: $block-padding;
+	text-align: center;
 	bottom: 0;
 	left: 0;
-	right: 0;
+	width: 100%;
+	#checkLocation{
+	
+		input{
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+			border: none;
+			padding: 5px;
+			width: 450px;
+			font-size: 2.6em;
+			color: $dark-grey;
+			vertical-align: bottom;
+		}
+		button{
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+			border: 2px solid $light-green;
+			padding: 2px 15px;
+			background: $dark-green;
+			color: $white;
+			font-size: 2em;
+			line-height: 1.6em;
+		}
+	}
 }
