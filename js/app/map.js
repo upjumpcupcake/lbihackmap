@@ -78,14 +78,15 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 
 		};
 		
-		var triggerApiCalls = function(latitude, longditude){
-			getFoursquare.update(latitude, longditude);
+		var triggerApiCalls = function(latitude, longditude, googleMap, mapObj){
+			getFoursquare.update(latitude, longditude, googleMap, mapObj);
 		}
 		
 		var codeAddress = function(){
-			var location = $('#location').val();
+			var mapObj = google.maps,
+				location = $('#location').val();
 			geocoder.geocode({'address': location}, function(results, status){
-				if(status == google.maps.GeocoderStatus.OK){
+				if(status == mapObj.GeocoderStatus.OK){
 					googleMap.setCenter(results[0].geometry.location);
 					var marker = new google.maps.Marker({
 						map: googleMap,
@@ -94,8 +95,10 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 					
 					var latitude = results[0].geometry.location.kb;
 					var longditude = results[0].geometry.location.lb;
+					
+					
+					triggerApiCalls(latitude, longditude, googleMap, mapObj);
 			
-					triggerApiCalls(latitude, longditude);
 					
 				} else{
 					console.log("Geocode was not successful for the following reason: " + status);
