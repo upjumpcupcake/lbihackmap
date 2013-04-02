@@ -79,6 +79,7 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 		};
 		
 		var triggerApiCalls = function(latitude, longditude, googleMap, mapObj){
+		
 			getFoursquare.update(latitude, longditude, googleMap, mapObj);
 		}
 		
@@ -93,9 +94,8 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 						position: results[0].geometry.location
 					});
 					
-					var latitude = results[0].geometry.location.kb;
-					var longditude = results[0].geometry.location.lb;
-					
+					var latitude = results[0].geometry.location.jb;
+					var longditude = results[0].geometry.location.kb;
 					
 					triggerApiCalls(latitude, longditude, googleMap, mapObj);
 			
