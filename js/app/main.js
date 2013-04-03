@@ -10,6 +10,7 @@ require.config({
 		bootstrap: 				'../lib/bootstrap.min.',
 		requireasync: 			'../lib/async.require',
 		googlemaps: 			'https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY7satBEH7wRhgWWGBhztulXE8g&sensor=false',
+		jquerybase64: 			'../lib/jquery.base64.min',
 
 		app: 					'app',
 		map: 					'map',

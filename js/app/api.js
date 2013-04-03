@@ -1,14 +1,16 @@
-define(['twitter', 'foursquare'], function(){
+define(['twitter', 'foursquare'], function(Twit){
 
 	var apiInstance = (function() {
 
 		var init = function(callback) {
 			console.log('API Init!');
-			
-			//Initialise foursquare request
+			initialiseTwitter();
 			getFoursquare.init();
 			callback();
-		
+		}
+
+		var initialiseTwitter = function() {
+			new Twit().init();
 		}
 		
 		var bindMapEvents = function(){

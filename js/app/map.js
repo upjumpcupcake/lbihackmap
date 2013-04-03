@@ -1,4 +1,4 @@
-define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY7satBEH7wRhgWWGBhztulXE8g&sensor=false'], function(){
+define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY7satBEH7wRhgWWGBhztulXE8g&sensor=false'], function() {
 
 	var mapInstance = (function() {
 
@@ -23,18 +23,15 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 		}
 
 		var getUserLocation = function () {
-
 		    var geolocationReceived = function(position) {
 		    	locationReceived(position)
 		    }
-
 		    var geolocationFailed = function(error) {
 		    	alert('Uh oh, Error');
 		    }
 		    var geolocationOptions = {
 		      timeout: 5000
-		    }
-			
+		    }			
 			if (Modernizr.geolocation){		
 				navigator.geolocation.getCurrentPosition(geolocationReceived, geolocationFailed, geolocationOptions);
 			} else {
