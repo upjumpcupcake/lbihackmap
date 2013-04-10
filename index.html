@@ -3,27 +3,57 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Hack Map</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/app.css">
-        <link href='http://fonts.googleapis.com/css?family=Inder' rel='stylesheet' type='text/css'>
+        <title>Middle Of Nowhere</title>
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <link href='http://fonts.googleapis.com/css?family=Gabriela' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
         <script data-main="js/app/main" src="js/lib/require.js"></script>
     </head>
     <body>
-    	<header>
-			<h1>Middle of nowhere</h1>
-		</header>
+    	<section id="header">
+    		<header>
+    			<h1>Middle Of Nowhere</h1>
+    			<div id="restart"></div>
+    		</header>
+    	</section>
+
         <section id="main">
-	       <section id="map">      
-	       </section>
+        	<div id="map"></div>
+        	<div id="controls"></div>
+        	<div id="rm-container" class="rm-container">
+    			<div class="rm-wrapper">
+					<div id="search-panel">
+						<div class="front">
+							<div class="search-container">
+								<div id="search" class="clearfix">
+					    			<input id="location" type="text" placeholder="Enter a location" />
+					    			<div id="submit">Go</div>
+						    	</div>
+					    		<div id="loading"></div>
+					    		<div id="services">
+						    		<h2>Select the services we should search for:</h2>
+						    		<ul class="clearfix">
+						    			<li id="flickr"><span>flickr</span></li>
+						    			<li id="foursquare"><span>foursquare</span></li>
+						    			<li id="twitter"><span>twitter</span></li>
+						    			<li id="youtube" class="last"><span>youtube</span></li>
+						    		</ul>
+						    	</div>
+		    				</div>
+		    			</div>
+						<div class="back"></div>
+					</div>
+				</div>
+			</div>
         </section>
-        <div class="formWrapper">
-			<form action="#" id="checkLocation">
-				<label for="location"></label>
-				<input name="location" id="location" type="text" placeholder="Enter a location" />
-				<button>What's going on</button>
-			</form>
-		</div>
+
+        <section id="footer">
+        	<header>
+        		<p class="copyright">&copy; 2013 Lbi code monkeys</p>
+        	</header>
+        </section>
     </body>
 </html>
