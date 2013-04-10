@@ -2,6 +2,10 @@ define(['jquerybase64'], function(){
   
   var twitterInstance = function() {
 
+    var init = function() {
+      console.log('Twit Init');
+    }
+
    //  var accessToken;
    //  var base64AccessToken;
 
@@ -60,9 +64,9 @@ define(['jquerybase64'], function(){
 
     
 
-  	// return {
-   //  	init: init,
-  	// }
+  	return {
+    	init: init,
+  	}
 
   };
 

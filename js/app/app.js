@@ -1,9 +1,4 @@
 require(['map', 'api'], function (Map, API) {
-<<<<<<< HEAD
-	new Map().init();
-	new API().init();
-});
-=======
 
 	var config = {
 			services : {},
@@ -213,4 +208,3 @@ require(['map', 'api'], function (Map, API) {
 		new API().init();
 	});
 });
->>>>>>> Added UI 'stuff'
