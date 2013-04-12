@@ -1,12 +1,13 @@
-require(['map', 'api'], function (Map, API) {
+require(['map', 'api'], function (MAP, API) {
 
-	var config = {
-			services : {},
+	var settings = {
+			services : [],
 			geoData : {
 				latLng : null,
 				placeName : null
 			},
-			location : {}
+			location : {},
+			mapId : 'map'
 		},
 		$services,
 		$servicesList,
@@ -17,15 +18,15 @@ require(['map', 'api'], function (Map, API) {
 	function locationSuccess(position) {
 		var geoCoder = new google.maps.Geocoder();
 
-		config.geoData.provided = true;
-		config.geoData.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		settings.geoData.provided = true;
+		settings.geoData.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-		geoCoder.geocode({'location': config.geoData.latLng, 'region': 'en-gb'}, function (results, status) {
-			console.dir(results);
+		geoCoder.geocode({'location': settings.geoData.latLng, 'region': 'en-gb'}, function (results, status) {
 			if (status === google.maps.GeocoderStatus.OK) {
-				config.geoData.placeName = results[0].address_components[1].long_name;
+				settings.geoData.placeName = results[0].address_components[1].long_name;
 				$location.addClass('pre-selected').val(results[0].address_components[1].long_name + ', ' + results[0].address_components[2].short_name).on('focus', function() {
-					$(this).removeClass('pre-selected'); // Allows the user to override the geolocation provided by the browser
+					$(this).removeClass('pre-selected'); // If the user overrides the geolocation provided by the browser, set the styling appropriately
+					settings.geoData.provided = false;
 				});
 				setTimeout(function() {
 					hideLoader(hideGeoTip);
@@ -34,20 +35,33 @@ require(['map', 'api'], function (Map, API) {
 		});
 	}
 
-	function showControls() {
-		setTimeout(function() {
-			$('#controls').animate({'right':'35px'}, 1000,'easeOutBounce');
-		}, 1300);
+	function showMapLoader() {
+		// setTimeout(function() {
+		// 	$('#controls').animate({'right':'35px'}, 600,'easeOutBounce');
+		// }, 1300);
+		$('#controls-wrapper').fadeIn(400);
 	}
 
-	function hideControls() {
+	function hideMapLoader() {
 		setTimeout(function() {
-			$('#controls').css({'right':'-310px'});
+			$('#controls-loading').fadeOut(800, function() {
+				//$('#controls-wrapper').fadeOut(800);
+				$('#controls-wrapper').addClass('phil');
+			});
 		}, 1000);
 	}
 
+	// function hideMapLoader() {
+	// 	setTimeout(function() {
+	// 		$('#controls').css({'right':'-310px'});
+	// 	}, 1000);
+	// }
+
 	function showGeoTip() {
 		$('#geo-tip').addClass('active');
+		setTimeout(function() {
+			// $('#services h2').addClass('active');
+		}, 500);
 	}
 
 	function hideGeoTip() {
@@ -70,14 +84,19 @@ require(['map', 'api'], function (Map, API) {
 	/*
 	* Search the services element for items
 	*/
-	function checkForServices() {
+	function getServicesRequired() {
 		$servicesList.each(function() {
-			config.services[this.id] = serviceRequired(this.id);
+			if (serviceRequired(this.id)) {
+				settings.services.push(this.id);
+			}
+			//settings.services[this.id] = serviceRequired(this.id);
 		});
+		return settings.services;
 	}
 
-	function checkLocValue() {
-		config.location.value = $location.val();
+	function getProvidedLocation() {
+		settings.location.provided = true;
+		settings.location.value = $location.val();
 	}
 
 	/*
@@ -98,11 +117,13 @@ require(['map', 'api'], function (Map, API) {
 	* Stop the loading animation
 	*/
 	function hideLoader(callback) {
-		$loading.fadeOut(650, function(){
-			if (callback !== undefined) {
-				callback();
-			}
-		});
+		setTimeout(function() {
+			$loading.fadeOut(650, function() {
+				if (callback !== undefined) {
+					callback();
+				}
+			});
+		}, 500);
 	}
 
 	/*
@@ -152,12 +173,22 @@ require(['map', 'api'], function (Map, API) {
 			$submit = $main.find('#submit'),
 			locateHTML = '<p id="geo-tip">Click this to use your current location...</p><div id="locate-me"></div>';
 
+		$('#services h2').addClass('active');
+		// Kick off the initial map render
+		MAP.init(settings.mapId, hideLoader);
+
+		require(['twitter'], function (TWITTER) {
+			console.log(TWITTER);
+		});
+
 		// Assign some vars
 		$services = $main.find('#services');
 		$servicesList = $services.find('li');
 		$location = $main.find('#location');
 		$restart = $('#restart');
 		$loading = $('#loading');
+
+		showLoader();
 
 		// Empty out any previous values
 		$location.val('');
@@ -167,35 +198,33 @@ require(['map', 'api'], function (Map, API) {
 
 		// Attach 'Go' button handler
 		$submit.on('click', function() {
-			showLoader();
-			// $('#rm-container').addClass('rm-open');
-			// showRestart();
+			showMapLoader();
+
 			setTimeout(function() {
 				$('#rm-container').addClass('rm-open');
-				hideLoader();
 				showRestart();
-				showControls();
-			}, 1000);
-			checkForServices();
-			// If the user hasn't chosen to use the current location, get the entry they manually provided
-			if (!config.geoData.provided) {
-				checkLocValue();
+			}, 300);
+
+			API.init(getServicesRequired());
+
+			// If the user hasn't chosen to use the current location, get the entry that was manually provided
+			if (!settings.geoData.provided) {
+				getProvidedLocation();
 			}
-			console.log(config);
-			//new Map.init(config);
+			MAP.update(settings, hideMapLoader);
 
 		});
 
 		$restart.on('click', function() {
 			$('#rm-container').removeClass('rm-open');
 			hideRestart();
-			hideControls();
+			hideMapLoader();
 		});
 
 		// If supported, insert geolocation button & tip into the search criteria 'field'
 		if (Modernizr.geolocation) {
 			$search.prepend(locateHTML);
-			setTimeout(showGeoTip, 350);
+			setTimeout(showGeoTip, 850);
 
 			$('#locate-me').on('click', function() {
 				// Prompt for Geo access to access co-ords
@@ -204,7 +233,6 @@ require(['map', 'api'], function (Map, API) {
 			});
 		}
 
-		new Map().init();
-		new API().init();
+		//new API().init();
 	});
 });
