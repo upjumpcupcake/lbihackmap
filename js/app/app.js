@@ -28,34 +28,33 @@ require(['map', 'api'], function (MAP, API) {
 					$(this).removeClass('pre-selected'); // If the user overrides the geolocation provided by the browser, set the styling appropriately
 					settings.geoData.provided = false;
 				});
-				setTimeout(function() {
 					hideLoader(hideGeoTip);
-				}, 400);
 			}
 		});
 	}
 
 	function showMapLoader() {
-		// setTimeout(function() {
-		// 	$('#controls').animate({'right':'35px'}, 600,'easeOutBounce');
-		// }, 1300);
 		$('#controls-wrapper').fadeIn(400);
 	}
 
 	function hideMapLoader() {
 		setTimeout(function() {
 			$('#controls-loading').fadeOut(800, function() {
-				//$('#controls-wrapper').fadeOut(800);
-				$('#controls-wrapper').addClass('phil');
+				showControlsPanel();
 			});
-		}, 1000);
+		}, 600);
 	}
 
-	// function hideMapLoader() {
-	// 	setTimeout(function() {
-	// 		$('#controls').css({'right':'-310px'});
-	// 	}, 1000);
-	// }
+	function showControlsPanel() {
+		$('#controls-wrapper').addClass('panel');
+		
+		// Grab the list of services from the splash panel and duplicate in the controls panel
+		$services.find('ul').clone().appendTo('#controls-panel');
+
+		setTimeout(function() {
+			$('.controls-container').addClass('panel-flip');
+		}, 800);
+	}
 
 	function showGeoTip() {
 		$('#geo-tip').addClass('active');
@@ -123,7 +122,7 @@ require(['map', 'api'], function (MAP, API) {
 					callback();
 				}
 			});
-		}, 500);
+		}, 400);
 	}
 
 	/*
@@ -141,30 +140,6 @@ require(['map', 'api'], function (MAP, API) {
 	}
 
 	/*
-	* jQuery easing methods
-	*/
-	jQuery.extend( jQuery.easing, {
-		easeOutElastic: function (x, t, b, c, d) {
-			var s=1.70158;var p=0;var a=c;
-			if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
-			if (a < Math.abs(c)) { a=c; var s=p/4; }
-			else var s = p/(2*Math.PI) * Math.asin (c/a);
-			return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
-		},
-		easeOutBounce: function (x, t, b, c, d) {
-	        if ((t/=d) < (1/2.75)) {
-	            return c*(7.5625*t*t) + b;
-	        } else if (t < (2/2.75)) {
-	            return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-	        } else if (t < (2.5/2.75)) {
-	            return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-	        } else {
-	            return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
-	        }
-	    }
-	});
-
-	/*
 	* DOM Ready
 	*/
 	$(function() {
@@ -173,22 +148,15 @@ require(['map', 'api'], function (MAP, API) {
 			$submit = $main.find('#submit'),
 			locateHTML = '<p id="geo-tip">Click this to use your current location...</p><div id="locate-me"></div>';
 
+		// Animate in the service tip
 		$('#services h2').addClass('active');
-		// Kick off the initial map render
-		MAP.init(settings.mapId, hideLoader);
-
-		require(['twitter'], function (TWITTER) {
-			console.log(TWITTER);
-		});
-
+		
 		// Assign some vars
 		$services = $main.find('#services');
 		$servicesList = $services.find('li');
 		$location = $main.find('#location');
 		$restart = $('#restart');
 		$loading = $('#loading');
-
-		showLoader();
 
 		// Empty out any previous values
 		$location.val('');
@@ -203,15 +171,16 @@ require(['map', 'api'], function (MAP, API) {
 			setTimeout(function() {
 				$('#rm-container').addClass('rm-open');
 				showRestart();
+				setTimeout(function() {
+					API.init(getServicesRequired());
+					MAP.update(settings, hideMapLoader);
+				}, 1200);
 			}, 300);
-
-			API.init(getServicesRequired());
 
 			// If the user hasn't chosen to use the current location, get the entry that was manually provided
 			if (!settings.geoData.provided) {
 				getProvidedLocation();
 			}
-			MAP.update(settings, hideMapLoader);
 
 		});
 
@@ -223,16 +192,31 @@ require(['map', 'api'], function (MAP, API) {
 
 		// If supported, insert geolocation button & tip into the search criteria 'field'
 		if (Modernizr.geolocation) {
+			showLoader();
+
 			$search.prepend(locateHTML);
-			setTimeout(showGeoTip, 850);
+			// Introduce a slight pause before we show the tip
+			setTimeout(function() {
+				showGeoTip();
+				// Animating the tip and drawing the map together is killing the browser. Stagger instead.
+				setTimeout(function() {
+					// Kick off the initial map render
+					MAP.init(settings.mapId, hideLoader);
+				}, 1000);
+			}, 850);
 
 			$('#locate-me').on('click', function() {
-				// Prompt for Geo access to access co-ords
+				// Prompt for Geo access to get co-ords
 				showLoader();
 				navigator.geolocation.getCurrentPosition(locationSuccess, locationFail, {timeout:2500});
 			});
+		} else {
+			// No geolocation so just show the map
+			setTimeout(function() {
+				// Kick off the initial map render
+				MAP.init(settings.mapId, hideLoader);
+			}, 450);
 		}
 
-		//new API().init();
 	});
 });
