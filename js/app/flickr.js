@@ -1,6 +1,6 @@
 define([], function(){
 
-	FLICKR = (function() {
+	var FLICKR = (function() {
 
 		/*********************************
 		settings argument is an object, eg:

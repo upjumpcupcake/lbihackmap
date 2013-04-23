@@ -19,7 +19,8 @@ require(['map', 'api'], function (MAP, API) {
 				latitude : 0,
 				longitude : 0,
 				latLng : null,
-				placeName : null
+				placeName : null,
+				resultsZoomLevel : 15
 			},
 			location : {},
 			map : {

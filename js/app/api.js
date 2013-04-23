@@ -8,8 +8,10 @@ define([], function(){
 			YOUTUBE;
 
 		function init(services, settings) {
+			console.log(services);
 			require(services, function() {
 				$.each(arguments, function(i, module) {
+					console.log(module);
 					var moduleId = module.getModuleId();
 
 					switch (moduleId) {
@@ -19,8 +21,9 @@ define([], function(){
 						break;
 
 					case('foursquare'):
+						console.log('4square call....');
 						FOURSQUARE = module;
-						//FOURSQUARE.update(settings.geoData, settings.services.foursquare, settings.map.instance);
+						FOURSQUARE.init(settings.geoData, settings.services.foursquare, settings.map.instance);
 						break;
 
 					case('twitter'):

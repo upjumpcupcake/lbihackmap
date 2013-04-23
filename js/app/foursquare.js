@@ -1,12 +1,16 @@
 define([], function(){
 	
-	getFoursquare = (function(){
-		// var getFoursquareJson = function(settings, client, googleMap)
-		var getFoursquareJson = function(latitude, longditude, googleMap, mapObj){
-			
+	var FOURSQUARE = (function() {
+		
+		var moduleId = 'foursquare'; 
+
+		function getModuleId() {
+			return moduleId;
+		}
+
+		function init(settings, client, googleMap) {
 			var limit = 20,
-				// url = 'https://api.foursquare.com/v2/venues/explore?ll=' + settings.latitude + ',' + settings.longitude + '&client_id=' + client.clientId + 'client_secret=' + client.clientSecret;
-				url = 'https://api.foursquare.com/v2/venues/explore?ll=' + latitude + ',' + longditude + '&client_id=RQPBSUGGRSJH3GZQNABEV35JRFNT3WFK5LIKPNCWJHY2ZDON&client_secret=KCHKHT3BFOAMPFV4NWEQQDH302TI5NPFK02ELZJ5C3VBJZSW&v=20130326';
+				url = 'https://api.foursquare.com/v2/venues/explore?ll=' + settings.latitude + ',' + settings.longitude + '&client_id=' + client.clientId + '&client_secret=' + client.clientSecret;
 				
 				$.getJSON(url, function(data){
 					
@@ -55,23 +59,20 @@ define([], function(){
 					};
 					
 					getVenues();
+					googleMap.setZoom(settings.resultsZoomLevel);
 					
 				});
 				
 		
 		}
 		
-		return{
-			init: function(){
-				
-			}, 
-			update: function(latitude, longditude, googleMap, mapObj){
-				getFoursquareJson(latitude, longditude, googleMap, mapObj);
-			}
-		}
+		return {
+			getModuleId: getModuleId,
+			init: init
+		};
 		
-	})();
+	}());
 	
-	return getFoursquare;
+	return FOURSQUARE;
 
 });
