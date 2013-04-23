@@ -1,10 +1,11 @@
 define([], function(){
 	
 	getFoursquare = (function(){
-		
+		// var getFoursquareJson = function(settings, client, googleMap)
 		var getFoursquareJson = function(latitude, longditude, googleMap, mapObj){
 			
 			var limit = 20,
+				// url = 'https://api.foursquare.com/v2/venues/explore?ll=' + settings.latitude + ',' + settings.longitude + '&client_id=' + client.clientId + 'client_secret=' + client.clientSecret;
 				url = 'https://api.foursquare.com/v2/venues/explore?ll=' + latitude + ',' + longditude + '&client_id=RQPBSUGGRSJH3GZQNABEV35JRFNT3WFK5LIKPNCWJHY2ZDON&client_secret=KCHKHT3BFOAMPFV4NWEQQDH302TI5NPFK02ELZJ5C3VBJZSW&v=20130326';
 				
 				$.getJSON(url, function(data){

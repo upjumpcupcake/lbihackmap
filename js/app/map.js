@@ -23,12 +23,13 @@ define(['requireasync!https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ4VOmMY
 			if (typeof callback === 'function') {
 				mapObj.event.addListener(googleMap, 'tilesloaded', callback);
 			}
+			return googleMap; // return the map instance so we can pass it around to other modules as needed
 		}
 
 		function setMapLocation(settings, callback) {
 			// Check whether a callback function was supplied
 			if (typeof callback === 'function') {
-				mapObj.event.addListener(googleMap, 'tilesloaded', callback);
+				mapObj.event.addListenerOnce(googleMap, 'tilesloaded', callback);
 			}
 
 			if (settings.geoData.provided) {

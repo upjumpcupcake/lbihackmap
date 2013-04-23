@@ -4,12 +4,19 @@ define([], function(){
 
 		/*********************************
 		settings argument is an object, eg:
-			var settings = {
-				provider	: 0,
-				apiKey		: '634562c3512132b584e66ff22d4c5288',
-				userID		: '39569477@N05',
-				photoSize	: 'm'
+			flickr : {
+				apiKey : '634562c3512132b584e66ff22d4c5288',
+				userID : '39569477@N05',
+				photoSize : 'm'
 			};
+
+		geoData argument is an object, eg:
+			geoData : {
+				latitude : 0,
+				longitude : 0,
+				latLng : null,
+				placeName : null
+			}
 		*********************************/
 
 		var moduleId = 'flickr',
@@ -23,7 +30,7 @@ define([], function(){
 			return moduleId;
 		}
 
-		function init() {
+		function init(settings, geoData) {
 			console.log('FLICKR init called');
 		}
 

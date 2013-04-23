@@ -7,7 +7,7 @@ define([], function(){
 			TWITTER,
 			YOUTUBE;
 
-		function init(services) {
+		function init(services, settings) {
 			require(services, function() {
 				$.each(arguments, function(i, module) {
 					var moduleId = module.getModuleId();
@@ -15,16 +15,17 @@ define([], function(){
 					switch (moduleId) {
 					case('flickr'):
 						FLICKR = module;
-						FLICKR.init();
+						FLICKR.init(settings.services.flickr, settings.geoData);
 						break;
 
 					case('foursquare'):
 						FOURSQUARE = module;
+						//FOURSQUARE.update(settings.geoData, settings.services.foursquare, settings.map.instance);
 						break;
 
 					case('twitter'):
 						TWITTER = module;
-						TWITTER.init();
+						TWITTER.init(settings.services.twitter);
 						break;
 
 					case('youtube'):
@@ -37,23 +38,6 @@ define([], function(){
 				});
 			});
 		}
-		// var init = function(callback) {
-		// 	console.log('API Init!');
-		// 	initialiseTwitter();
-		// 	getFoursquare.init();
-		// 	callback();
-		// }
-
-		// var initialiseTwitter = function() {
-		// 	new Twit().init();
-		// }
-		
-		// var bindMapEvents = function(){
-		// 	$('#checkLocation button').on('click', function(e){
-		// 		e.preventDefault();
-		// 		//getFoursquare.update();
-		// 	});
-		// };
 
 		return {
 			init: init
