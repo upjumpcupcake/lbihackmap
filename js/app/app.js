@@ -4,9 +4,13 @@ require(['map', 'api'], function (MAP, API) {
 			services : {
 				required : [],
 				flickr : {
-					apiKey : '634562c3512132b584e66ff22d4c5288',
-					userID : '39569477@N05',
-					photoSize : 'm'
+					apiKey : '5579814a804136a05490e63c4a0798ce',
+					photoSize		: '',
+					photoThumbSize	: 't',
+					photosToShow	: 60,
+					searchRadius	: 10,
+					radiusUnits		: 'km',
+					callback		: hideMapLoader
 				},
 				twitter : {},
 				foursquare : {
@@ -31,6 +35,7 @@ require(['map', 'api'], function (MAP, API) {
 		},
 		$services,
 		$servicesList,
+		$newServicesList,
 		$location,
 		$loading,
 		$restart;
@@ -85,10 +90,12 @@ require(['map', 'api'], function (MAP, API) {
 	*/
 	function addServicesToControls() {
 		var $servicesClone = $servicesList.clone();
-
+		console.log($servicesClone);
 		$servicesClone.each(function(i) {
 			var name = this.id;
-			$(this).removeAttr('id').attr('class', name);
+			$(this).removeAttr('id').addClass(name).on('click', function() {
+				$(this).toggleClass('exclude');
+			});
 		}).appendTo('#controls-panel').wrapAll('<ul />');
 	}
 
@@ -206,13 +213,12 @@ require(['map', 'api'], function (MAP, API) {
 			if (!settings.geoData.provided) {
 				getProvidedLocation();
 			}
-
 			setTimeout(function() {
 				$('#rm-container').addClass('rm-open');
 				showRestart();
 				setTimeout(function() {
 					API.init(getServicesRequired(), settings);
-					MAP.update(settings, hideMapLoader);
+					MAP.update(settings/*, hideMapLoader*/);
 				}, 1200);
 			}, 300);
 		});

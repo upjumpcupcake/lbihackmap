@@ -8,20 +8,17 @@ define([], function(){
 			YOUTUBE;
 
 		function init(services, settings) {
-			console.log(services);
 			require(services, function() {
 				$.each(arguments, function(i, module) {
-					console.log(module);
 					var moduleId = module.getModuleId();
 
 					switch (moduleId) {
 					case('flickr'):
 						FLICKR = module;
-						FLICKR.init(settings.services.flickr, settings.geoData);
+						FLICKR.init(settings);
 						break;
 
 					case('foursquare'):
-						console.log('4square call....');
 						FOURSQUARE = module;
 						FOURSQUARE.init(settings.geoData, settings.services.foursquare, settings.map.instance);
 						break;
@@ -34,7 +31,7 @@ define([], function(){
 					case('youtube'):
 						YOUTUBE = module;
 						break;
-						
+
 					default:
 						console.log('Switch statement default called. No modules found?');
 					}
@@ -43,7 +40,11 @@ define([], function(){
 		}
 
 		return {
-			init: init
+			init: init,
+			FLICKR : FLICKR,
+			FOURSQUARE : FOURSQUARE,
+			TWITTER : TWITTER,
+			YOUTUBE : YOUTUBE
 		};
 
 	}());
